@@ -1,0 +1,32 @@
+name: Validate Java coursework
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        java: ['17', '23']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: ${{ matrix.java }}
+      - name: Test on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/test.ps1
+      - name: Test on Linux
+        if: runner.os == 'Linux'
+        run: sh scripts/test.sh
+      - name: Run complete demonstration
+        shell: bash
+        run: java -cp build/classes oopnemo.app.Main --demo
