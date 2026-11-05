@@ -1,0 +1,55 @@
+OOP NEMO | SIW1 | University and hospital administration
+
+=== 1. Original classes, relationships and payment rules ===
+D001 | DOCTOR  | Elena Petrova     | age 38 | elena@example.com | Karakol | payment 2900 USD
+D002 | DOCTOR  | Azamat Bekov      | age 32 | azamat@example.com | Osh | payment 2100 USD
+S001 | STUDENT | Aizada Omurova    | age 19 | aizada@example.com | Osh | payment 120 USD
+S002 | STUDENT | Timur Asanov      | age 21 | timur@example.com | Bishkek | payment 65 USD
+T001 | TEACHER | Nurlan Sadykov    | age 45 | nurlan@example.com | Bishkek | payment 1035 USD
+Student-owned results: [Mathematics: 87 PASS, Physics: 41 FAIL]
+Dr. Elena Petrova examined Demo patient. Total patients: 121
+H001 | City Hospital No. 1 | doctors 1 -> [D001]
+H002 | Private Clinic | doctors 2 -> [D001, D002]
+
+=== 2. Business identity, primary lookup and role index ===
+Same ID equals: true
+HashSet size for two equal IDs: 1
+Lookup D001: Elena Petrova
+Doctors from role index: [D001, D002]
+City filter Osh: [D002, S001]
+
+=== 3. Natural ordering and three custom comparators ===
+Natural ID order: [D001, D002, S001, S002, T001]
+Name ascending: [S001, D002, D001, T001, S002]
+Age ascending: [S001, S002, D002, D001, T001]
+Payment descending: [D001, D002, T001, S001, S002]
+
+=== 4. Applicant and payroll operator priority workflow ===
+Submission order: LOW, HIGH, MEDIUM, HIGH
+Processing order: priority first; FIFO within equal priority
+R-HIGH-1 | person D001 | HIGH | PENDING
+R-HIGH-2 | person D002 | HIGH | PENDING
+R-MEDIUM | person T001 | MEDIUM | PENDING
+R-LOW | person S001 | LOW | PENDING
+Processed: R-HIGH-1 | Elena Petrova (D001) | 2920 USD
+Processed: R-HIGH-2 | Azamat Bekov (D002) | 2100 USD
+Processed: R-MEDIUM | Nurlan Sadykov (T001) | 1035 USD
+Processed: R-LOW | Aizada Omurova (S001) | 120 USD
+Empty queue returns Optional.empty: true
+
+=== 5. CRUD consistency and edge cases ===
+Updated name in hospital: Elena Petrova Updated
+Deleted D001: primary lookup empty = true
+Role index after deletion: [D002]
+H001 memberships after deletion: 0
+Pending requests after deletion: 0
+Deleted person's request removed: true
+Duplicate rejected: Person ID already exists: S001
+Invalid GPA rejected: GPA must be finite and between 0 and 4.
+Missing ID handled: Person not found: MISSING
+
+=== 6. Aggregated report after CRUD ===
+People: 4 | Students: 2 | Teachers: 1 | Doctors: 1
+Hospitals: 2 | Pending requests: 0 | Processed requests: 3
+Monthly payments: 3320 USD | Average student GPA: 3.50
+Demo finished successfully. Payments are simulated; data is in memory.

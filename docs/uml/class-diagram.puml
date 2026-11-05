@@ -1,0 +1,147 @@
+@startuml Domain
+title OOP nemo SIW1 domain model
+skinparam classAttributeIconSize 0
+hide empty members
+interface Payable {
+  +getName(): String
+  +calculateMonthlyPayment(): long
+}
+abstract class Person {
+  -id: String {readOnly}
+  -name: String
+  -age: int
+  -email: String
+  -city: String
+  +getRole(): Role
+  +updateContactDetails(...): void
+  +compareTo(other: Person): int
+  +equals(other: Object): boolean
+  +hashCode(): int
+}
+interface "Comparable<Person>" as ComparablePerson
+class Student {
+  -group: String
+  -gpa: double
+  -course: int
+  -examResults: List<ExamResult>
+  +takeExam(subject: String, score: int): ExamResult
+  +calculateScholarship(): long
+}
+class Teacher {
+  -subject: String
+  -experienceYears: int
+  -salary: int
+  +giveLecture(topic: String): String
+  +calculateRaise(): long
+}
+class Doctor {
+  -specialization: String
+  -patientsCount: int
+  +examinePatient(name: String): String
+  +calculateMonthlyIncome(): long
+}
+class ExamResult {
+  -id: String {readOnly}
+  -subject: String {readOnly}
+  -score: int {readOnly}
+  +isPassed(): boolean
+}
+class Hospital {
+  -id: String {readOnly}
+  -name: String
+  -doctors: Set<Doctor>
+  +addDoctor(doctor: Doctor): boolean
+  +removeDoctor(doctor: Doctor): boolean
+}
+class PaymentRequest {
+  -id: String {readOnly}
+  -personId: String {readOnly}
+  -priority: Priority {readOnly}
+  -sequence: long {readOnly}
+  -status: RequestStatus {readOnly}
+  +processed(): PaymentRequest
+  +cancelled(): PaymentRequest
+}
+enum Role { STUDENT; TEACHER; DOCTOR }
+enum Priority { HIGH; MEDIUM; LOW }
+enum RequestStatus { PENDING; PROCESSED; CANCELLED }
+Person ..|> Payable
+Person ..|> ComparablePerson
+Student --|> Person
+Teacher --|> Person
+Doctor --|> Person
+Student "1" *-- "0..*" ExamResult : owns
+Hospital "0..*" o-- "0..*" Doctor : memberships
+Person "1" -- "0..*" PaymentRequest : applicant by personId
+Person ..> Role
+PaymentRequest ..> Priority
+PaymentRequest ..> RequestStatus
+note bottom of Student
+ExamResult construction has package visibility.
+Student creates results and returns immutable snapshots.
+end note
+@enduml
+
+@startuml Services
+title OOP nemo SIW1 service layer
+skinparam classAttributeIconSize 0
+class Main
+class Demo
+class DemoData
+class CampusService {
+  -peopleById: Map<String, Person>
+  -peopleByRole: Map<Role, Set<Person>>
+  -hospitalsById: Map<String, Hospital>
+  -requestsById: Map<String, PaymentRequest>
+  -requestQueue: Queue<PaymentRequest>
+  -payroll: PayrollService
+  +addPerson(person: Person): void
+  +findPerson(id: String): Optional<Person>
+  +updatePerson(...): void
+  +removePerson(id: String): void
+  +sortedPeople(comparator): List<Person>
+  +filterPeople(predicate): List<Person>
+  +assignDoctor(hospitalId, doctorId): boolean
+  +recordExam(studentId, subject, score): ExamResult
+  +submitRequest(...): PaymentRequest
+  +cancelRequest(id: String): void
+  +processNextRequest(): Optional<PaymentReceipt>
+  +summary(): String
+}
+class PayrollService {
+  +pay(payee: Payable): long
+}
+interface Payable
+class Person
+class Hospital
+class PaymentRequest
+class PersonComparators {
+  {static} BY_NAME: Comparator<Person>
+  {static} BY_AGE: Comparator<Person>
+  {static} BY_PAYMENT_DESC: Comparator<Person>
+}
+class PaymentReceipt <<record>> {
+  requestId: String
+  personId: String
+  name: String
+  amount: long
+}
+Main ..> CampusService
+Main ..> PersonComparators
+Demo ..> CampusService
+DemoData ..> CampusService
+CampusService "1" --> "0..*" Person : registry and role sets
+CampusService "1" --> "0..*" Hospital : registry
+CampusService "1" --> "0..*" PaymentRequest : index and priority queue
+CampusService *-- PayrollService
+PayrollService ..> Payable : method parameter
+Person ..|> Payable
+PersonComparators ..> Person
+CampusService ..> PaymentReceipt : returns
+note bottom of CampusService
+HashMap primary registries; EnumMap role index.
+PriorityQueue ordered by priority then submission sequence.
+Lists are generated views rather than duplicate registries.
+Single-user in-memory application, not thread-safe.
+end note
+@enduml

@@ -1,0 +1,12 @@
+Build passed (Java 17 target).
+PASS Business identity and collection contracts
+PASS Empty collections and missing keys
+PASS CRUD and atomic validation
+PASS Composition, aggregation and many-to-many
+PASS Priority order, FIFO ties and cancellation
+PASS Cascade removal across every managed reference
+PASS Sorting, filters, analytics and snapshots
+PASS Validation and payment arithmetic
+PASS Repeated CRUD consistency with 100 people
+PASS Interactive console with valid, invalid and ended input
+PASS: 10 test groups; 184 assertions.

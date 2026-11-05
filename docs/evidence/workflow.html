@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>OOP nemo execution evidence</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f2f4f7;padding:28px;font-family:Arial,sans-serif;color:#111827}
+main{max-width:1540px;margin:auto}h1{font-size:27px;margin:0 0 8px}p{font-size:16px;color:#475569;margin:0 0 18px}
+pre{margin:0;background:#122032;color:#eff5fc;padding:24px;border-radius:8px;font:18px/1.42 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+</style><main><h1>Priority workflow, CRUD and analytics</h1>
+<p>Actual Java execution captured on 5 November 2026. Command: <code>java -cp build/classes oopnemo.app.Main --demo</code></p>
+<pre>=== 4. Applicant and payroll operator priority workflow ===
+Submission order: LOW, HIGH, MEDIUM, HIGH
+Processing order: priority first; FIFO within equal priority
+R-HIGH-1 | person D001 | HIGH | PENDING
+R-HIGH-2 | person D002 | HIGH | PENDING
+R-MEDIUM | person T001 | MEDIUM | PENDING
+R-LOW | person S001 | LOW | PENDING
+Processed: R-HIGH-1 | Elena Petrova (D001) | 2920 USD
+Processed: R-HIGH-2 | Azamat Bekov (D002) | 2100 USD
+Processed: R-MEDIUM | Nurlan Sadykov (T001) | 1035 USD
+Processed: R-LOW | Aizada Omurova (S001) | 120 USD
+Empty queue returns Optional.empty: true
+
+=== 5. CRUD consistency and edge cases ===
+Updated name in hospital: Elena Petrova Updated
+Deleted D001: primary lookup empty = true
+Role index after deletion: [D002]
+H001 memberships after deletion: 0
+Pending requests after deletion: 0
+Deleted person&#x27;s request removed: true
+Duplicate rejected: Person ID already exists: S001
+Invalid GPA rejected: GPA must be finite and between 0 and 4.
+Missing ID handled: Person not found: MISSING
+
+=== 6. Aggregated report after CRUD ===
+People: 4 | Students: 2 | Teachers: 1 | Doctors: 1
+Hospitals: 2 | Pending requests: 0 | Processed requests: 3
+Monthly payments: 3320 USD | Average student GPA: 3.50
+Demo finished successfully. Payments are simulated; data is in memory.</pre></main></html>

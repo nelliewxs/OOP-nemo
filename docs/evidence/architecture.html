@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>OOP nemo execution evidence</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f2f4f7;padding:28px;font-family:Arial,sans-serif;color:#111827}
+main{max-width:1540px;margin:auto}h1{font-size:27px;margin:0 0 8px}p{font-size:16px;color:#475569;margin:0 0 18px}
+pre{margin:0;background:#122032;color:#eff5fc;padding:24px;border-radius:8px;font:18px/1.42 Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+</style><main><h1>Domain model, identity and sorting</h1>
+<p>Actual Java execution captured on 5 November 2026. Command: <code>java -cp build/classes oopnemo.app.Main --demo</code></p>
+<pre>OOP NEMO | SIW1 | University and hospital administration
+
+=== 1. Original classes, relationships and payment rules ===
+D001 | DOCTOR  | Elena Petrova     | age 38 | elena@example.com | Karakol | payment 2900 USD
+D002 | DOCTOR  | Azamat Bekov      | age 32 | azamat@example.com | Osh | payment 2100 USD
+S001 | STUDENT | Aizada Omurova    | age 19 | aizada@example.com | Osh | payment 120 USD
+S002 | STUDENT | Timur Asanov      | age 21 | timur@example.com | Bishkek | payment 65 USD
+T001 | TEACHER | Nurlan Sadykov    | age 45 | nurlan@example.com | Bishkek | payment 1035 USD
+Student-owned results: [Mathematics: 87 PASS, Physics: 41 FAIL]
+Dr. Elena Petrova examined Demo patient. Total patients: 121
+H001 | City Hospital No. 1 | doctors 1 -&gt; [D001]
+H002 | Private Clinic | doctors 2 -&gt; [D001, D002]
+
+=== 2. Business identity, primary lookup and role index ===
+Same ID equals: true
+HashSet size for two equal IDs: 1
+Lookup D001: Elena Petrova
+Doctors from role index: [D001, D002]
+City filter Osh: [D002, S001]
+
+=== 3. Natural ordering and three custom comparators ===
+Natural ID order: [D001, D002, S001, S002, T001]
+Name ascending: [S001, D002, D001, T001, S002]
+Age ascending: [S001, S002, D002, D001, T001]
+Payment descending: [D001, D002, T001, S001, S002]</pre></main></html>
